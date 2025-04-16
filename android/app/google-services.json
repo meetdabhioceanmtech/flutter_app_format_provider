@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198103789978",
+    "project_id": "testing-fed3b",
+    "storage_bucket": "testing-fed3b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198103789978:android:0c2fb2eaa9c9cb438d4a23",
+        "android_client_info": {
+          "package_name": "com.flutter.project.format"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGwlmcXsl8K5eA3QljeLvY4TBqSlbeJkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
