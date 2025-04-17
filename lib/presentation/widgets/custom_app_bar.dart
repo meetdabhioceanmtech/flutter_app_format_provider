@@ -45,7 +45,7 @@ PreferredSizeWidget? customAppBar({
             ),
             onPressed: onTap ??
                 () {
-                  CommonWidget.keyboardClose(context: context);
+                  CommonWidget.keyboardClose();
                   CommonRouter.pop();
                 },
           )

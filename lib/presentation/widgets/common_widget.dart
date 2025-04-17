@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_project/presentation/custom_snackbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_project/common/constants/common_router.dart';
@@ -26,98 +27,89 @@ class CommonWidget {
     Color? color,
   }) {
     if (image.isEmpty) return const SizedBox.shrink();
+    double? h = height?.h;
+    double? w = width?.w;
 
     Widget buildPlaceholder({required bool isError}) {
       return Center(
-        child: isError
-            ? const Icon(Icons.error)
-            : CircularProgressIndicator(
-                color: appConstants.primary1Color,
-              ),
+        child: isError ? const Icon(Icons.error) : CircularProgressIndicator(color: appConstants.primary1Color),
       );
     }
 
     Widget applyBorderRadius(Widget child) {
-      if (shape == BoxShape.circle) {
-        return ClipOval(child: child);
-      } else if (borderRadius != null || roundBorderRadius != null) {
+      if (shape == BoxShape.circle) return ClipOval(child: child);
+      if (borderRadius != null || roundBorderRadius != null) {
         return ClipRRect(
-          borderRadius: (roundBorderRadius != null ? BorderRadius.circular(roundBorderRadius) : borderRadius) ??
-              BorderRadius.zero,
+          borderRadius: roundBorderRadius != null
+              ? BorderRadius.circular(roundBorderRadius.r)
+              : borderRadius ?? BorderRadius.zero,
           child: child,
         );
-      } else {
-        return child;
       }
+      return child;
     }
 
-    if (image.startsWith('http') || image.startsWith('https')) {
+    bool isSvg = image.toLowerCase().endsWith('.svg');
+
+    if (image.startsWith('http')) {
       // Network image
-      if (image.endsWith('.svg')) {
-        return applyBorderRadius(
-          SvgPicture.network(
-            image,
-            width: width,
-            height: height,
-            fit: fit,
-            semanticsLabel: 'A shark?!',
-            placeholderBuilder: (BuildContext context) => buildPlaceholder(isError: false),
-            colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-          ),
-        );
-      } else {
-        return applyBorderRadius(
-          CachedNetworkImage(
-            imageUrl: image,
-            width: width,
-            height: height,
-            color: color,
-            fit: fit,
-            errorListener: (value) => buildPlaceholder(isError: false),
-            placeholder: (context, url) => buildPlaceholder(isError: false),
-            errorWidget: (context, url, error) => buildPlaceholder(isError: true),
-          ),
-        );
-      }
+      return applyBorderRadius(
+        isSvg
+            ? SvgPicture.network(
+                image,
+                width: w,
+                height: h,
+                fit: fit,
+                semanticsLabel: 'A shark?!',
+                placeholderBuilder: (BuildContext context) => buildPlaceholder(isError: false),
+                colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+              )
+            : CachedNetworkImage(
+                imageUrl: image,
+                width: w,
+                height: h,
+                color: color,
+                fit: fit,
+                errorListener: (value) => buildPlaceholder(isError: false),
+                placeholder: (context, url) => buildPlaceholder(isError: false),
+                errorWidget: (context, url, error) => buildPlaceholder(isError: true),
+              ),
+      );
     } else if (image.startsWith('asset')) {
       // Asset image
-      if (image.endsWith('.svg')) {
-        return applyBorderRadius(
-          SvgPicture.asset(
-            image,
-            width: width,
-            height: height,
-            fit: fit,
-            colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
-            placeholderBuilder: (BuildContext context) => buildPlaceholder(isError: false),
-          ),
-        );
-      } else {
-        return applyBorderRadius(
-          Image.asset(
-            image,
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (context, error, stackTrace) => buildPlaceholder(isError: true),
-          ),
-        );
-      }
+      return applyBorderRadius(
+        isSvg
+            ? SvgPicture.asset(
+                image,
+                width: w,
+                height: h,
+                fit: fit,
+                placeholderBuilder: (_) => buildPlaceholder(isError: false),
+                colorFilter: color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+              )
+            : Image.asset(
+                image,
+                width: w,
+                height: h,
+                fit: fit,
+                errorBuilder: (_, __, ___) => buildPlaceholder(isError: true),
+              ),
+      );
     } else if (image.startsWith('memory')) {
       // Memory image
       try {
         final base64String = image.split(',')[1];
-        final Uint8List bytes = base64.decode(base64String);
+        final bytes = base64.decode(base64String);
         return applyBorderRadius(
           Image.memory(
             bytes,
-            width: width,
-            height: height,
+            width: w,
+            height: h,
             fit: fit,
-            errorBuilder: (context, error, stackTrace) => buildPlaceholder(isError: true),
+            errorBuilder: (_, __, ___) => buildPlaceholder(isError: true),
           ),
         );
-      } catch (e) {
+      } catch (_) {
         return buildPlaceholder(isError: true);
       }
     } else {
@@ -125,11 +117,11 @@ class CommonWidget {
       return applyBorderRadius(
         Image.file(
           File(image),
-          width: width,
-          height: height,
+          width: w,
+          height: h,
           fit: fit,
           color: color,
-          errorBuilder: (context, error, stackTrace) => buildPlaceholder(isError: true),
+          errorBuilder: (_, __, ___) => buildPlaceholder(isError: true),
         ),
       );
     }
@@ -174,24 +166,23 @@ class CommonWidget {
                 child: Column(
                   children: [
                     CommonWidget.sizedBox(height: 20),
-                    isTitle
-                        ? Column(
-                            children: [
-                              Center(
-                                child: commonText(
-                                  text: title ?? '',
-                                  lineThrough: true,
-                                  style: titleTextStyle ??
-                                      Theme.of(context).textTheme.subTitle2SemiboldHeading.copyWith(
-                                            color: appConstants.neutral1Color,
-                                            height: 1,
-                                          ),
-                                ),
-                              ),
-                              CommonWidget.sizedBox(height: 15),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
+                    if (isTitle)
+                      Column(
+                        children: [
+                          Center(
+                            child: commonText(
+                              text: title ?? '',
+                              lineThrough: true,
+                              style: titleTextStyle ??
+                                  Theme.of(context).textTheme.subTitle2SemiboldHeading.copyWith(
+                                        color: appConstants.neutral1Color,
+                                        height: 1,
+                                      ),
+                            ),
+                          ),
+                          CommonWidget.sizedBox(height: 15),
+                        ],
+                      ),
                     CommonWidget.container(
                       child: CommonWidget.commonText(
                         maxLines: 2,
@@ -205,6 +196,7 @@ class CommonWidget {
                       padding: EdgeInsets.all(20.r),
                       child: Row(
                         children: [
+                          // Negative Button
                           Expanded(
                             child: commonButton(
                               context: context,
@@ -219,6 +211,7 @@ class CommonWidget {
                             ),
                           ),
                           SizedBox(width: 15.w),
+                          // Positive Button
                           Expanded(
                             child: commonButton(
                               context: context,
@@ -234,7 +227,7 @@ class CommonWidget {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -253,6 +246,10 @@ class CommonWidget {
     String? doneText,
     bool? outSideOnTap,
     TextAlign? textAlign,
+    double contentTitleFontSize = 16,
+    double buttonFontSize = 18,
+    Color? contentTitleColor,
+    Color? buttonFontColor,
   }) {
     return showDialog(
       context: context,
@@ -273,7 +270,8 @@ class CommonWidget {
             contentTitle,
             textAlign: textAlign ?? TextAlign.center,
             style: Theme.of(context).textTheme.body2RegularHeading.copyWith(
-                  color: appConstants.neutral1Color,
+                  color: contentTitleColor ?? appConstants.neutral1Color,
+                  fontSize: contentTitleFontSize.sp,
                 ),
           ),
           actions: <Widget>[
@@ -281,13 +279,19 @@ class CommonWidget {
                 onPressed: () => CommonRouter.pop(),
                 child: Text(
                   backText ?? TranslationConstants.cancel.translate(context),
-                  style: TextStyle(color: appConstants.primary1Color, fontSize: 18),
+                  style: TextStyle(
+                    color: buttonFontColor ?? appConstants.primary1Color,
+                    fontSize: buttonFontSize.sp,
+                  ),
                 )),
             TextButton(
               onPressed: () => onPressedDone ?? CommonRouter.pop(args: true),
               child: Text(
                 doneText ?? TranslationConstants.delete.translate(context),
-                style: TextStyle(color: appConstants.primary1Color, fontSize: 18),
+                style: TextStyle(
+                  color: buttonFontColor ?? appConstants.primary1Color,
+                  fontSize: buttonFontSize.sp,
+                ),
               ),
             ),
           ],
@@ -298,25 +302,25 @@ class CommonWidget {
 
   static Widget commonText({
     required String text,
-    bool? bold = false,
+    bool bold = false,
     FontWeight? fontWeight,
-    TextOverflow? textOverflow,
+    TextOverflow textOverflow = TextOverflow.ellipsis,
     Color? color,
     double? fontSize,
     double? letterSpacing,
     double? wordSpacing,
     TextAlign? textAlign,
     int maxLines = 1,
-    bool? lineThrough,
+    bool lineThrough = false,
     Color? lineThroughColor,
-    double? lineThroughthickness,
-    bool? underline,
+    double? lineThroughThickness,
+    bool underline = false,
     TextStyle? style,
     double? height,
   }) {
     return Text(
       text,
-      overflow: textOverflow ?? TextOverflow.ellipsis,
+      overflow: textOverflow,
       textAlign: textAlign,
       maxLines: maxLines,
       style: style ??
@@ -324,17 +328,17 @@ class CommonWidget {
             height: height,
             color: color ?? appConstants.neutral1Color,
             fontSize: fontSize?.sp ?? 20.sp,
-            fontWeight: bold == true ? FontWeight.bold : fontWeight,
+            fontWeight: bold ? FontWeight.bold : fontWeight ?? FontWeight.normal,
             fontFamily: 'Poppins',
             letterSpacing: letterSpacing ?? 0.15,
             wordSpacing: wordSpacing ?? 0.1,
-            decoration: lineThrough == true
+            decoration: lineThrough
                 ? TextDecoration.lineThrough
-                : underline == true
+                : underline
                     ? TextDecoration.underline
                     : TextDecoration.none,
             decorationColor: lineThroughColor ?? Colors.black38,
-            decorationThickness: lineThroughthickness ?? 1.sp,
+            decorationThickness: lineThroughThickness ?? 1.sp,
           ),
     );
   }
@@ -342,24 +346,24 @@ class CommonWidget {
   static Widget container({
     double? width,
     double? height,
+    Color color = Colors.white,
+    AlignmentGeometry? alignment,
+    EdgeInsetsGeometry? margin,
+    double marginAllSide = 0.0,
+    EdgeInsetsGeometry? padding,
+    double paddingAllSide = 0.0,
+    bool isPaddingAllSide = false,
+    BoxConstraints? constraints,
+    Widget? child,
     bool isBorder = false,
     Color borderColor = Colors.black,
     double borderWidth = 1.0,
     double borderRadius = 0.0,
-    Color color = Colors.white,
-    AlignmentGeometry? alignment,
-    double marginAllSide = 0.0,
     double topLeft = 0.0,
     double topRight = 0.0,
     double bottomLeft = 0.0,
     double bottomRight = 0.0,
     bool isBorderOnlySide = false,
-    EdgeInsetsGeometry? margin,
-    double paddingAllSide = 0.0,
-    bool isPaddingAllSide = false,
-    EdgeInsetsGeometry? padding,
-    Widget? child,
-    BoxConstraints? constraints,
     BoxShape shape = BoxShape.rectangle,
     List<BoxShadow>? boxShadow,
   }) {
@@ -377,10 +381,10 @@ class CommonWidget {
         borderRadius: shape == BoxShape.rectangle
             ? (isBorderOnlySide
                 ? BorderRadius.only(
-                    bottomLeft: Radius.circular(bottomLeft.w),
-                    bottomRight: Radius.circular(bottomRight.w),
-                    topLeft: Radius.circular(topLeft.h),
-                    topRight: Radius.circular(topRight.h),
+                    topLeft: Radius.circular(topLeft.r),
+                    topRight: Radius.circular(topRight.r),
+                    bottomLeft: Radius.circular(bottomLeft.r),
+                    bottomRight: Radius.circular(bottomRight.r),
                   )
                 : BorderRadius.circular(borderRadius.r))
             : null,
@@ -391,7 +395,7 @@ class CommonWidget {
   }
 
   static Widget padding({
-    Widget? child,
+    required Widget child,
     EdgeInsetsGeometry? padding,
     double? paddingAllSide,
     bool isPaddingAllSide = false,
@@ -423,6 +427,13 @@ class CommonWidget {
     double? height,
     Widget? child,
   }) {
+    if (child == null) {
+      return SizedBox(
+        height: height?.h,
+        width: width?.w,
+      );
+    }
+
     return SizedBox(
       height: height?.h,
       width: width?.w,
@@ -457,9 +468,10 @@ class CommonWidget {
   }) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: container(
-        height: height ?? 53,
-        width: width ?? ScreenUtil().screenWidth,
+        height: (height ?? 53).h,
+        width: width != null ? width.h : ScreenUtil().screenWidth,
         margin: margin,
         alignment: alignment ?? Alignment.center,
         isBorder: isBorder,
@@ -487,7 +499,7 @@ class CommonWidget {
     );
   }
 
-  static void keyboardClose({required BuildContext context}) {
+  static void keyboardClose() {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
@@ -500,7 +512,7 @@ class CommonWidget {
     bool isPrefixIcon = false,
     Widget? prefixWidget,
     String? prefixIconPath,
-    int? maxLength,
+    int maxLength = 150,
     int minLines = 1,
     int maxLines = 1,
     TextInputAction? textInputAction,
@@ -528,6 +540,7 @@ class CommonWidget {
     Function(String, Map<String, dynamic>)? onAppPrivateCommand,
     bool filled = false,
     bool readOnly = false,
+    AutovalidateMode autoValidateMode = AutovalidateMode.onUserInteraction,
   }) {
     return TextFormField(
       focusNode: focusNode,
@@ -535,14 +548,14 @@ class CommonWidget {
       scrollController: scrollController,
       scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       inputFormatters: inputFormatters,
-      onTapOutside: (e) => keyboardClose(context: context),
+      onTapOutside: (_) => keyboardClose(),
       onEditingComplete: onEditingComplete,
       onAppPrivateCommand: onAppPrivateCommand,
       maxLines: maxLines,
       enabled: enabled,
       readOnly: readOnly,
       onChanged: onChanged,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: autoValidateMode,
       obscureText: obscureText,
       textInputAction: textInputAction ?? TextInputAction.done,
       controller: controller,
@@ -550,7 +563,7 @@ class CommonWidget {
       cursorColor: cursorColor ?? appConstants.primary1Color,
       cursorHeight: cursorHeight,
       autofocus: autoFocus,
-      maxLength: maxLength ?? 150,
+      maxLength: maxLength,
       minLines: minLines,
       style: style,
       textAlignVertical: textAlignVertical ?? TextAlignVertical.center,
@@ -559,14 +572,13 @@ class CommonWidget {
         filled: filled,
         fillColor: fillColor ?? appConstants.primary7Color,
         prefixIcon: prefixWidget ??
-            (isPrefixIcon
-                ? Container(
-                    color: Colors.transparent,
+            (isPrefixIcon && prefixIconPath != null
+                ? Padding(
                     padding: EdgeInsets.all(13.r),
                     child: InkWell(
                       onTap: onPrefixIconTap,
                       child: imageBuilder(
-                        image: prefixIconPath ?? '',
+                        image: prefixIconPath,
                         height: prefixIconHeight,
                       ),
                     ),
@@ -610,16 +622,14 @@ class CommonWidget {
       child: Padding(
         padding: EdgeInsets.all(16.r),
         child: CommonWidget.sizedBox(
-          height: 300,
-          width: 300,
+          height: 300.h,
+          width: 300.w,
           child: Center(
-            child: Center(
-              child: CircularProgressIndicator(
-                color: appConstants.whiteBackgroundColor,
-                strokeWidth: 2,
-                backgroundColor: appConstants.primary1Color,
-                strokeCap: StrokeCap.round,
-              ),
+            child: CircularProgressIndicator(
+              color: appConstants.whiteBackgroundColor,
+              strokeWidth: 2,
+              backgroundColor: appConstants.primary1Color,
+              strokeCap: StrokeCap.round,
             ),
           ),
         ),
@@ -644,10 +654,11 @@ class CommonWidget {
     Color? inactiveTrackColor,
     Color? trackColor,
     void Function(bool)? onFocusChange,
+    double scale = 0.75,
   }) {
     return Transform.scale(
-      scaleX: 0.75.r,
-      scaleY: 0.75.r,
+      scaleX: scale,
+      scaleY: scale,
       child: Switch(
         activeColor: activeColor ?? appConstants.primary1Color,
         activeTrackColor: activeTrackColor ?? appConstants.neutral1Color,
@@ -689,25 +700,26 @@ class CommonWidget {
       color: bgColor ?? Colors.white,
       alignment: Alignment.center,
       width: ScreenUtil().screenWidth,
+      padding: padding ?? EdgeInsets.all(16.r),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          removeImage
-              ? const SizedBox.shrink()
-              : CommonWidget.imageBuilder(
-                  image: imagePath ?? 'assets/svgs/common/data_not_found.svg',
-                  height: height ?? 130.h,
-                ),
+          if (!removeImage)
+            CommonWidget.imageBuilder(
+              image: imagePath ?? 'assets/svgs/common/data_not_found.svg',
+              height: height ?? 130.h,
+            ),
           CommonWidget.sizedBox(height: 20),
           CommonWidget.commonText(
             fontSize: 15.sp,
             fontWeight: FontWeight.bold,
             text: (heading ?? TranslationConstants.no_data_found.translate(context)).toCamelcase(),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subTitle3SemiboldHeading.copyWith(
-                  color: titleColor,
-                ),
+            style: Theme.of(context)
+                .textTheme
+                .subTitle3SemiboldHeading
+                .copyWith(color: titleColor ?? appConstants.neutral1Color),
           ),
           sizedBox(height: 10.h),
           Padding(
@@ -718,7 +730,7 @@ class CommonWidget {
                   TranslationConstants.there_is_no_data_to_show_you.translate(context),
               maxLines: 2,
               style: Theme.of(context).textTheme.body2RegularHeading.copyWith(
-                    color: subTitleColor,
+                    color: subTitleColor ?? appConstants.grey1,
                   ),
             ),
           ),
@@ -742,6 +754,10 @@ class CommonWidget {
   }
 
   static Future<void> commonImageDialog({required String path, required BuildContext context}) async {
+    if (path.isEmpty) {
+      return CustomSnackbar.show(snackbarType: SnackbarType.ERROR, message: 'Image path is empty');
+    }
+
     await showDialog(
       context: context,
       builder: (context) {
@@ -752,6 +768,7 @@ class CommonWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Close Button
               InkWell(
                 splashColor: Colors.transparent,
                 splashFactory: NoSplash.splashFactory,
@@ -767,16 +784,16 @@ class CommonWidget {
                   ),
                 ),
               ),
+
+              // Image Display
               container(
-                paddingAllSide: 2.5,
+                paddingAllSide: 2.5, // Keeps padding flexible
                 borderRadius: 10.r,
                 constraints: BoxConstraints(
-                  maxHeight: ScreenUtil().screenHeight * 0.8,
-                  minWidth: ScreenUtil().screenWidth * 0.85,
+                  maxHeight: ScreenUtil().screenHeight * 0.8, // Responsive max height
+                  minWidth: ScreenUtil().screenWidth * 0.85, // Responsive min width
                 ),
-                child: imageBuilder(
-                  image: path,
-                ),
+                child: imageBuilder(image: path), // Dynamically load image
               ),
             ],
           ),
@@ -788,16 +805,16 @@ class CommonWidget {
   static Widget imageButton({
     required String svgPicturePath,
     VoidCallback? onTap,
-    double? iconSize,
-    BoxFit? boxFit,
+    double iconSize = 20.0,
+    BoxFit boxFit = BoxFit.contain,
     Color? color,
   }) {
     return InkWell(
       onTap: onTap,
       child: imageBuilder(
         image: svgPicturePath,
-        fit: boxFit ?? BoxFit.contain,
-        height: iconSize ?? 20.h,
+        fit: boxFit,
+        height: iconSize,
         color: color,
       ),
     );
@@ -808,21 +825,21 @@ class CommonWidget {
     required Widget child,
     double? heightFactor,
     Color? backgroundColor,
-    bool? isTitleBar,
+    bool isTitleBar = true,
     String? title,
-    TextStyle? titleTextStye,
+    TextStyle? titleTextStyle,
     bool isTitleBold = false,
     double? titleFontSize,
     Color? dividerColor,
     double? dividerThickness,
     EdgeInsetsGeometry? padding,
-    bool? isDismissible,
+    bool isDismissible = true,
   }) async {
     return await showModalBottomSheet(
       elevation: 0,
       context: context,
       isScrollControlled: true,
-      isDismissible: isDismissible ?? true,
+      isDismissible: isDismissible,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12.r),
@@ -835,10 +852,10 @@ class CommonWidget {
         return Padding(
           padding: padding ?? MediaQuery.of(context).viewInsets,
           child: FractionallySizedBox(
-            heightFactor: heightFactor,
+            heightFactor: heightFactor ?? 0.7,
             child: ClipRRect(
               borderRadius: BorderRadius.only(topLeft: Radius.circular(26.r), topRight: Radius.circular(26.r)),
-              child: isTitleBar == true
+              child: isTitleBar
                   ? CommonWidget.container(
                       color: appConstants.whiteBackgroundColor,
                       child: Column(
@@ -850,11 +867,12 @@ class CommonWidget {
                               children: [
                                 Text(
                                   title ?? "",
-                                  style: titleTextStye ??
-                                      Theme.of(context)
-                                          .textTheme
-                                          .body2MediumHeading
-                                          .copyWith(color: appConstants.primary1Color),
+                                  style: titleTextStyle ??
+                                      Theme.of(context).textTheme.body2MediumHeading.copyWith(
+                                            color: appConstants.primary1Color,
+                                            fontWeight: isTitleBold ? FontWeight.bold : FontWeight.normal,
+                                            fontSize: titleFontSize ?? 18.sp,
+                                          ),
                                 ),
                                 const Spacer(),
                                 GestureDetector(
@@ -909,7 +927,7 @@ class CommonWidget {
     int minLines = 1,
     List<TextInputFormatter>? textInputFormatter,
     EdgeInsetsGeometry? contentPadding,
-    int? maxLength,
+    int maxLength = 150,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -930,7 +948,7 @@ class CommonWidget {
               readOnly: onTap == null ? false : true,
               obscureText: obscureText,
               suffixWidget: suffixWidget,
-              prefixWidget: isPrefixIcon ? suffixWidget : null,
+              prefixWidget: isPrefixIcon ? prefixWidget : null,
               context: context,
               hintText: hintText,
               hintStyle: TextStyle(color: appConstants.primary6Color),
