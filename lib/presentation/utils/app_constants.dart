@@ -67,7 +67,6 @@ class AppConstants {
   late Color grey2;
 
   void loadColor(bool isLightMode) {
-    print(isLightMode);
     if (isLightMode) {
       loadLight();
     } else {

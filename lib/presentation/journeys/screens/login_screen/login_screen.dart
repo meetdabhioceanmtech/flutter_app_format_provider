@@ -6,13 +6,13 @@ import 'package:flutter_project/common/constants/theme.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/screens/image_crop/image_crop_args.dart';
 import 'package:flutter_project/presentation/journeys/screens/privacy_and_terms/privacy_and_terms_screen.dart';
-import 'package:flutter_project/presentation/provider/theme/theme_provider.dart';
+import 'package:flutter_project/presentation/provider/common_provider/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
 import 'package:flutter_project/common/extention/size_box_extension.dart';
 import 'package:flutter_project/common/extention/string_extension.dart';
 import 'package:flutter_project/common/extention/theme_extension.dart';
-import 'package:flutter_project/presentation/provider/toggle/toggle_provider.dart';
+import 'package:flutter_project/presentation/provider/common_provider/toggle_provider.dart';
 import 'package:flutter_project/presentation/widgets/common_widget.dart';
 import 'package:provider/provider.dart';
 

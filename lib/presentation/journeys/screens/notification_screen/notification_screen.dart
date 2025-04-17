@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/data/models/my_notification_model.dart';
+import 'package:flutter_project/data/models/app_model/my_notification_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_project/common/constants/common_router.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
 import 'package:flutter_project/common/extention/string_extension.dart';
-import 'package:flutter_project/presentation/provider/notification/notification_handle/notification_provider.dart';
+import 'package:flutter_project/presentation/provider/app_provider/notification_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/screens/notification_screen/notification_widget.dart';
 import 'package:flutter_project/presentation/widgets/common_widget.dart';

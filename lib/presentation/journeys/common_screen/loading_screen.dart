@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_project/presentation/provider/loading/loading_provider.dart';
+import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:provider/provider.dart';
 

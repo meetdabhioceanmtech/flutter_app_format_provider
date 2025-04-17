@@ -1,12 +1,12 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_project/common/constants/env_constants.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
 
 class ApiConstatnts {
-  static const String baseUrl = 'https://bakery.oceanapplications.com/api/v1/';
-  static const String liveBaseUrl = 'https://bakery.oceanapplications.com/api/v1/';
-  static const String xLocalization = 'en';
-  static const String accept = 'application/json';
-  static const String salt = 'VhU8dwzsjHQC8mRFGdJzsYtHDGZ5KVlZA';
-
+  static final String baseUrl = dotenv.env[EnvConstants.BASE_URL] ?? '';
+  static final String liveBaseUrl = dotenv.env[EnvConstants.LIVE_BASE_URL] ?? '';
+  static final String xLocalization = dotenv.env[EnvConstants.X_LOCALIZATION] ?? '';
+  static final String accept = dotenv.env[EnvConstants.ACCEPT] ?? '';
   var headers = {
     "X-localization": xLocalization,
     "Accept": accept,

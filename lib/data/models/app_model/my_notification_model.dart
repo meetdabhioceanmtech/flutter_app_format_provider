@@ -1,5 +1,4 @@
-// Class to represent the parsed JSON
-import 'package:flutter_project/data/models/model_response_extend.dart';
+import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
 
 class MyNotification extends ModelResponseExtend {
   bool status;

@@ -1,7 +1,7 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:flutter_project/data/models/model_response_extend.dart';
-import 'package:flutter_project/domain/entities/language/app_language/app_language_entity.dart';
+import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
+import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
 
 class LanguageModel extends ModelResponseExtend {
   final bool status;

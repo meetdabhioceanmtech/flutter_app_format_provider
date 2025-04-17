@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/constants/route_constants.dart';
 import 'package:flutter_project/presentation/journeys/screens/login_screen/login_screen.dart';
-import 'package:flutter_project/presentation/journeys/app_home/app_home_screen.dart';
+import 'package:flutter_project/presentation/journeys/common_screen/app_home/app_home_screen.dart';
 import 'package:flutter_project/presentation/journeys/screens/notification_screen/notification_screen.dart';
 import 'package:flutter_project/presentation/journeys/screens/privacy_and_terms/privacy_and_terms_screen.dart';
 import 'package:flutter_project/presentation/journeys/screens/select_language/language_screen.dart';

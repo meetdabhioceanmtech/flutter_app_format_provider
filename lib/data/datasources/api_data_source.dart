@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_project/data/datasources/common_api_call.dart';
 import 'package:flutter_project/data/core/api_client.dart';
-import 'package:flutter_project/data/models/model_response_extend.dart';
+import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
 import 'package:flutter_project/domain/entities/app_error.dart';
 
 abstract class ApiDataSource {

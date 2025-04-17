@@ -2,7 +2,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
-import 'package:flutter_project/data/models/general_setting_model.dart';
+import 'package:flutter_project/data/models/app_model/general_setting_model.dart';
 
 part 'general_setting_entity.g.dart';
 

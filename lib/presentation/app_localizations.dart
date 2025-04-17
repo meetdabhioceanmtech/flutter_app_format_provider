@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
 import 'package:flutter_project/common/constants/languages.dart';
-import 'package:flutter_project/domain/entities/language/app_language/app_language_entity.dart';
+import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:path_provider/path_provider.dart';
 

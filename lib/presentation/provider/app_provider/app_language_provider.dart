@@ -6,15 +6,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_project/common/constants/env_constants.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
 import 'package:flutter_project/common/constants/languages.dart';
-import 'package:flutter_project/data/core/api_constants.dart';
 import 'package:flutter_project/data/datasources/common_api_call.dart';
-import 'package:flutter_project/data/models/common_respnse_model.dart';
-import 'package:flutter_project/data/models/language_model.dart';
-import 'package:flutter_project/data/models/model_response_extend.dart';
+import 'package:flutter_project/data/models/common_model/common_respnse_model.dart';
+import 'package:flutter_project/data/models/app_model/language_model.dart';
+import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
 import 'package:flutter_project/domain/entities/app_error.dart';
-import 'package:flutter_project/domain/entities/language/app_language/app_language_entity.dart';
+import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
 import 'package:flutter_project/domain/usecases/api_usecase.dart';
-import 'package:flutter_project/presentation/provider/loading/loading_provider.dart';
+import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
 
@@ -133,7 +132,7 @@ class AppLanguageProvider extends ChangeNotifier {
     notifyListeners();
 
     Either<AppError, T> response = await _apiUsecase.call(
-      endpoint: '$endpoint${appLanguageEntity.id}?/salt=${ApiConstatnts.salt}',
+      endpoint: '$endpoint${appLanguageEntity.id}',
       fromJson: (json) => CommonResponseModel.fromJson(json) as T,
       apiCallType: APICallType.GET,
       screenName: 'AppLanguage',
