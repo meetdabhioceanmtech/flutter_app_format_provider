@@ -9,9 +9,9 @@ import 'package:flutter_project/presentation/journeys/screens/privacy_and_terms/
 import 'package:flutter_project/presentation/provider/common_provider/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/size_box_extension.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
-import 'package:flutter_project/common/extention/theme_extension.dart';
+import 'package:flutter_project/common/extension/size_box_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
+import 'package:flutter_project/common/extension/theme_extension.dart';
 import 'package:flutter_project/presentation/provider/common_provider/toggle_provider.dart';
 import 'package:flutter_project/presentation/widgets/common_widget.dart';
 import 'package:provider/provider.dart';

@@ -4,7 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dart_ping/dart_ping.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/presentation/custom_snackbar.dart';
+import 'package:flutter_project/presentation/widgets/custom_snackbar.dart';
 import 'package:flutter_project/presentation/globals.dart';
 
 void listenConnection() {

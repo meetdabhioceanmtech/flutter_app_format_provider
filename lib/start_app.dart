@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_project/presentation/network_connection.dart';
+import 'package:flutter_project/core/network/network_connection.dart';
 import 'package:flutter_project/presentation/provider/app_provider/language_provider.dart';
 import 'package:flutter_project/presentation/provider/common_provider/theme_provider.dart';
 import 'package:flutter_project/common/constants/languages.dart';
 import 'package:flutter_project/common/constants/route_constants.dart';
 import 'package:flutter_project/common/constants/theme.dart';
-import 'package:flutter_project/presentation/app_localizations.dart';
-import 'package:flutter_project/presentation/fade_page_route_builder.dart';
+import 'package:flutter_project/core/localization/app_localizations.dart';
+import 'package:flutter_project/core/navigation/fade_page_route_builder.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/common_screen/loading_screen.dart';
-import 'package:flutter_project/presentation/routes.dart';
+import 'package:flutter_project/core/navigation/routes.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,14 +43,13 @@ class _StartAppState extends State<StartApp> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _themeProvider.loadPreferredTheme();
+      loadInitialData();
+      _configureSelectNotificationSubject();
+      logicOfIntroductionScreen();
+      getPreviousNotificationCount();
+      internetCheck();
+      initialization();
     });
-    _configureSelectNotificationSubject();
-
-    loadInitialData();
-    initialization();
-    logicOfIntroductionScreen();
-    getPreviousNotificationCount();
-    internetCheck();
   }
 
   void loadInitialData() {

@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_editor/image_editor.dart' hide ImageSource;
-import 'package:flutter_project/common/extention/theme_extension.dart';
+import 'package:flutter_project/common/extension/theme_extension.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/screens/image_crop/crop_image_screen.dart';
 import 'package:flutter_project/presentation/widgets/common_widget.dart';

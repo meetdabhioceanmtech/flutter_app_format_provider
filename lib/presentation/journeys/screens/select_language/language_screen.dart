@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/constants/languages.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
 import 'package:flutter_project/domain/repositories/api_repositorie.dart';
 import 'package:flutter_project/domain/usecases/api_usecase.dart';
 import 'package:flutter_project/presentation/provider/app_provider/app_language_provider.dart';

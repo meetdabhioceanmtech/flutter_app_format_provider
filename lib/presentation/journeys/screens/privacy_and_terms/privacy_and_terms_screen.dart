@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
 import 'package:flutter_project/domain/repositories/api_repositorie.dart';
 import 'package:flutter_project/domain/usecases/api_usecase.dart';
 import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';

@@ -8,7 +8,7 @@ import 'package:flutter_project/data/models/app_model/general_setting_model.dart
 import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
 import 'package:flutter_project/domain/entities/app_error.dart';
 import 'package:flutter_project/domain/usecases/api_usecase.dart';
-import 'package:flutter_project/presentation/custom_snackbar.dart';
+import 'package:flutter_project/presentation/widgets/custom_snackbar.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
 

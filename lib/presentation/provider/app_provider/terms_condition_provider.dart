@@ -8,7 +8,7 @@ import 'package:flutter_project/data/models/app_model/terms_and_conditions_model
 import 'package:flutter_project/domain/entities/app_error.dart';
 import 'package:flutter_project/domain/usecases/api_usecase.dart';
 import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';
-import 'package:flutter_project/presentation/custom_snackbar.dart';
+import 'package:flutter_project/presentation/widgets/custom_snackbar.dart';
 import 'package:flutter_project/presentation/journeys/screens/privacy_and_terms/privacy_and_terms_screen.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
 

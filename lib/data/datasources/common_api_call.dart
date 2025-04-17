@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter_project/data/core/api_client.dart';
-import 'package:flutter_project/data/core/api_constants.dart';
-import 'package:flutter_project/data/core/unathorised_exception.dart';
+import 'package:flutter_project/core/api/api_client.dart';
+import 'package:flutter_project/core/api/api_constants.dart';
+import 'package:flutter_project/core/api/unathorised_exception.dart';
 import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
 import 'package:flutter_project/domain/entities/app_error.dart';
 

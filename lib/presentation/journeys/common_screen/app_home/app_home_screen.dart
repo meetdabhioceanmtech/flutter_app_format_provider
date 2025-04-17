@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
 import 'package:flutter_project/presentation/provider/app_provider/bottom_navigation_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/common_screen/app_home/app_home_widget.dart';

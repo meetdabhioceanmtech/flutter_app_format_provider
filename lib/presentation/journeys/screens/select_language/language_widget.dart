@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/size_box_extension.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
-import 'package:flutter_project/common/extention/theme_extension.dart';
+import 'package:flutter_project/common/extension/size_box_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
+import 'package:flutter_project/common/extension/theme_extension.dart';
 import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
 import 'package:flutter_project/presentation/provider/app_provider/app_language_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';

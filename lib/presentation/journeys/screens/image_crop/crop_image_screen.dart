@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/constants/translation_constants.dart';
-import 'package:flutter_project/common/extention/string_extension.dart';
-import 'package:flutter_project/common/extention/theme_extension.dart';
+import 'package:flutter_project/common/extension/string_extension.dart';
+import 'package:flutter_project/common/extension/theme_extension.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/journeys/screens/image_crop/crop_image_widget.dart';
 import 'package:flutter_project/presentation/journeys/screens/image_crop/image_crop_args.dart';

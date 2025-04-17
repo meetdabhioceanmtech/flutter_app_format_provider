@@ -10,7 +10,7 @@ import 'package:flutter_project/presentation/utils/app_functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
 import 'package:flutter_project/presentation/globals.dart';
-import 'package:flutter_project/presentation/new_notification_service.dart';
+import 'package:flutter_project/core/notifications/new_notification_service.dart';
 import 'package:flutter_project/presentation/widgets/common_widget.dart';
 
 class SplashScreen extends StatefulWidget {

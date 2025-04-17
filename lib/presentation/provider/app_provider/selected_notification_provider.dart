@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/presentation/new_notification_service.dart';
+import 'package:flutter_project/core/notifications/new_notification_service.dart';
 
 class SelectedNotificationProvider extends ChangeNotifier {
   NotificationPayloadModel? payloadModel;

@@ -34,14 +34,8 @@ class LoadingScreen extends StatelessWidget {
                     child: CircularProgressIndicator(
                       color: appConstants.primary1Color,
                     ),
-                    // child: const FlareActor(
-                    //   'assets/animation/loading_circle.flr',
-                    //   animation: 'load',
-                    //   snapToEnd: true,
-                    // ),
                   ),
                 ),
-                //  child: Center(child: Image.asset('assets/animation/ios.gif', height: 36.h, width: 36.w)),
               );
             }
             return const SizedBox.shrink();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_project/data/core/build_context.dart';
-import 'package:flutter_project/presentation/app_localizations.dart';
+import 'package:flutter_project/core/api/build_context.dart';
+import 'package:flutter_project/core/localization/app_localizations.dart';
 
 extension StringExtension on String {
   String intelliTrim() {

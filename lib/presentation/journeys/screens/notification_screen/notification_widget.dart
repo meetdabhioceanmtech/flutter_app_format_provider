@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_project/common/extention/theme_extension.dart';
+import 'package:flutter_project/common/extension/theme_extension.dart';
 import 'package:flutter_project/data/models/app_model/my_notification_model.dart';
 import 'package:flutter_project/presentation/provider/app_provider/notification_provider.dart';
 import 'package:flutter_project/presentation/globals.dart';
