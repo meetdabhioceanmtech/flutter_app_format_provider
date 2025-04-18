@@ -21,7 +21,6 @@ import 'package:flutter_project/presentation/provider/app_provider/bottom_naviga
 import 'package:flutter_project/presentation/provider/common_provider/general_setting_provider.dart';
 import 'package:flutter_project/presentation/provider/app_provider/language_provider.dart';
 import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';
-import 'package:flutter_project/presentation/provider/app_provider/notification_provider.dart';
 import 'package:flutter_project/presentation/provider/app_provider/selected_notification_provider.dart';
 import 'package:flutter_project/presentation/provider/common_provider/theme_provider.dart';
 import 'package:flutter_project/presentation/provider/common_provider/toggle_provider.dart';

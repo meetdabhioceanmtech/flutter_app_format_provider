@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-## Current Project Requirements Version : Last Update - 16/04/2025 - Add By Meet Dabhi
+## Current Project Requirements Version : Last Update - 18/04/2025 - Add By Meet Dabhi
 
 Flutter Version => 3.27.3
 Dart Version => 3.6.1
@@ -22,8 +22,6 @@ DevTools => 2.40.2
 
 ## Project functionality
 
-- Deep Link
-- Notification
 - Language L - Done
 - Thame (Dark/Light) - Done
 - API Format - Done
@@ -34,6 +32,8 @@ DevTools => 2.40.2
 - Firebase Crashlytics - Done
   - Test a debug mode please remove main in kReleaseMode (Line no = 100 || Find project Search (FirebaseCrashlytics.instance.crash())
   - How to check Add On Tap Method in => FirebaseCrashlytics.instance.crash()
+- Deep Link
+- Notification
 
 ## State Management and Project Managemnt
 

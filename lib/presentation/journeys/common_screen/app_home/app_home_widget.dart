@@ -56,7 +56,7 @@ abstract class AppHomeWidget extends State<AppHome> {
   }
 
   void installDataLoad() async {
-    print('>>>>>>>>>>> 111 $userToken');
+    //TODO : Uncomment the below line to enable the setupToken method
     // if (userToken != null) {
     await getFirebaseFcmToken();
     // }
