@@ -17,15 +17,9 @@ List<NavItems> bottomBarItems = const [
   NavItems(
     index: 2,
     title: TranslationConstants.setting,
-    icon: 'assets/svgs/job/setting.svg',
+    icon: 'assets/svgs/common/setting.svg',
   ),
 ];
-
-// List<NavItems> selectedBottomBarItems = const [
-//   NavItems(index: 0, title: "A", icon: '', activatedIcon: ''),
-//   NavItems(index: 1, title: "B", icon: '', activatedIcon: ''),
-//   NavItems(index: 2, title: "C", icon: '', activatedIcon: ''),
-// ];
 
 final bottomScreenList = [
   const HomeScreen(),

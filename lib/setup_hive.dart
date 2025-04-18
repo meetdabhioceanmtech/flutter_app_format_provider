@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
@@ -40,6 +42,9 @@ class SetupHive {
     //Language Management
     currentLangCode = currentLanBox.get(HiveConstants.PREFERRED_LANGUAGE, defaultValue: 'en');
     currentLanguagelabels = currentLanBox.get(HiveConstants.LANGUAGE_LABELS, defaultValue: null);
+    if (currentLanguagelabels == null) {
+      await _saveAssetsLangToDevice();
+    }
 
     isFirst = appBox.get(HiveConstants.IS_FIRST_LOAD, defaultValue: true);
     userToken = userDataBox.get(HiveConstants.USER_TOKEN, defaultValue: null);
@@ -57,7 +62,6 @@ class SetupHive {
       currentTheme = Themes.system;
     }
     deviceData = await AppFunctions().initPlatformState();
-    await _saveAssetsLangToDevice();
   }
 
   Future<void> loadLanguages() async {
@@ -71,15 +75,14 @@ class SetupHive {
   }
 
   Future<void> _saveAssetsLangToDevice() async {
-    languageLocalPath =
-        '${(await path_provider.getApplicationDocumentsDirectory()).path}${Platform.pathSeparator}languages';
+    try {
+      final String response = await rootBundle.loadString('assets/languages/en.json');
 
-    ByteData byteData = await rootBundle.load("assets/languages/en.json");
-
-    if (!await Directory(languageLocalPath).exists()) {
-      await Directory(languageLocalPath).create();
+      final Map<String, dynamic> languageData = json.decode(response);
+      await currentLanBox.put(HiveConstants.LANGUAGE_LABELS, languageData);
+      currentLanguagelabels = languageData;
+    } catch (e) {
+      log('Error in _saveAssetsLangToDevice: $e');
     }
-    File file = await File('$languageLocalPath/en.json').create(recursive: true);
-    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
   }
 }

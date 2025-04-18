@@ -146,15 +146,7 @@ void _initializeCatcher() {
           update: (_, repo, provider) => provider!..updateUsecase(ApiUsecase(dataRepositories: repo)),
         ),
 
-        ChangeNotifierProxyProvider2<LoadingProvider, ApiDataRepositories, NotificationProvider>(
-          create: (context) => NotificationProvider(
-            loadingProvider: context.read<LoadingProvider>(),
-            apiUsecase: ApiUsecase(dataRepositories: context.read<ApiDataRepositories>()),
-          ),
-          update: (_, provider, repo, previous) => previous!..updateUsecase(ApiUsecase(dataRepositories: repo)),
-        ),
-
-        ChangeNotifierProvider<AppLanguageProvider>(create: (context) => AppLanguageProvider()),
+        ChangeNotifierProvider(create: (_) => AppLanguageProvider()),
         ChangeNotifierProvider(create: (_) => LoadingProvider()),
         ChangeNotifierProvider(create: (_) => CounterProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),

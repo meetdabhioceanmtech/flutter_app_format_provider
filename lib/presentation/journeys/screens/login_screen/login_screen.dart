@@ -207,6 +207,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 20.sHeight,
+                InkWell(
+                  onTap: () => CommonRouter.pushNamed(RouteList.app_home),
+                  child: CommonWidget.commonText(
+                    text: 'Home Screen',
+                    style: Theme.of(context).textTheme.body2SemiboldHeading.copyWith(
+                          color: appConstants.primary1Color,
+                        ),
+                  ),
+                ),
+                20.sHeight,
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,

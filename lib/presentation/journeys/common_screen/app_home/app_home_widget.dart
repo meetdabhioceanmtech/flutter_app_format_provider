@@ -56,9 +56,10 @@ abstract class AppHomeWidget extends State<AppHome> {
   }
 
   void installDataLoad() async {
-    if (userToken != null) {
-      await getFirebaseFcmToken();
-    }
+    print('>>>>>>>>>>> 111 $userToken');
+    // if (userToken != null) {
+    await getFirebaseFcmToken();
+    // }
   }
 
   @override
@@ -73,6 +74,7 @@ abstract class AppHomeWidget extends State<AppHome> {
       print("FCM Token: $userFcmToken");
       log("FCM Token: $userFcmToken");
       String? fcmTokon = await FirebaseMessaging.instance.getToken() ?? "notfound";
+      log("FCM Token: $fcmTokon");
 
       if (fcmTokon != userFcmToken) {
         // deviceInfoCubit.updateDeviceInfo(fcmTokon: fcmTokon);
