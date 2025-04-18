@@ -145,7 +145,11 @@ abstract class AppHomeWidget extends State<AppHome> {
           decoration: BoxDecoration(
             color: appConstants.whiteBackgroundColor,
             boxShadow: [
-              BoxShadow(color: appConstants.primary4Color.withOpacity(0.1), blurRadius: 3, offset: const Offset(0, 2))
+              BoxShadow(
+                color: appConstants.primary4Color.withValues(alpha: 0.1),
+                blurRadius: 3,
+                offset: const Offset(0, 2),
+              )
             ],
           ),
           child: Column(

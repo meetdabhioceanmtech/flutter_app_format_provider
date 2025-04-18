@@ -24,6 +24,8 @@ DevTools => 2.40.2
 
 - Deep Link
 - Notification
+- Language L - Done
+- Thame (Dark/Light) - Done
 - API Format - Done
 - Common Widgets - Done
 - Image Crop functionality - Done
