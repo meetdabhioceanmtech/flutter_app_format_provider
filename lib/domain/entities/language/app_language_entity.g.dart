@@ -18,7 +18,7 @@ class AppLanguageEntityAdapter extends TypeAdapter<AppLanguageEntity> {
     };
     return AppLanguageEntity(
       id: fields[0] as int,
-      title: fields[1] as String,
+      name: fields[1] as String,
       shortCode: fields[2] as String,
       isDefault: fields[3] as int,
     );
@@ -31,7 +31,7 @@ class AppLanguageEntityAdapter extends TypeAdapter<AppLanguageEntity> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.title)
+      ..write(obj.name)
       ..writeByte(2)
       ..write(obj.shortCode)
       ..writeByte(3)
@@ -44,7 +44,5 @@ class AppLanguageEntityAdapter extends TypeAdapter<AppLanguageEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppLanguageEntityAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is AppLanguageEntityAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

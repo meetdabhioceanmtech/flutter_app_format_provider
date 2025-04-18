@@ -27,25 +27,25 @@ class LanguageModel extends ModelResponseExtend {
 
 class LanguageDetailModel extends AppLanguageEntity {
   final int id;
-  final String title;
+  final String name;
   final String shortCode;
   final int isDefault;
 
   LanguageDetailModel({
     required this.id,
-    required this.title,
+    required this.name,
     required this.shortCode,
     required this.isDefault,
   }) : super(
           id: id,
-          title: title,
+          name: name,
           shortCode: shortCode,
           isDefault: isDefault,
         );
 
   factory LanguageDetailModel.fromJson(Map<String, dynamic> json) => LanguageDetailModel(
         id: int.tryParse(json["id"].toString()) ?? 0,
-        title: json["title"]?.toString() ?? 'English',
+        name: json["title"]?.toString() ?? 'English',
         shortCode: json["iso_code"]?.toString() ?? 'en',
         isDefault: 0,
       );

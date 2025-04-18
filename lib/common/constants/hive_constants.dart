@@ -9,8 +9,11 @@ class HiveConstants {
   static const String CAPTION_LISTS = "CAPTION_LISTS";
   static const String NAV_NUMBER = "NAV_NUMBER";
   static const String SHARE_NUMBER = "SHARE_NUMBER";
+
   static const String APP_LANGUAGE_LIST = "APP_LANGUAGE_LIST";
   static const String USER_LANGUAGE_LIST = "USER_LANGUAGE_LIST";
+  static const String LANGUAGE_LABELS = 'language_labels';
+
   static const String PREFERRED_LANGUAGE = "preferred_language";
   static const String USER_ENTITY_DATA = "USER_ENTITY_DATA";
   static const String USER_MOBILE_NO = "USER_MOBILE_NO";
@@ -35,9 +38,9 @@ class HiveBoxConstants {
   HiveBoxConstants._();
   static const String THEME_BOX = "THEME_BOX";
   static const String JOB_SEARCH_BOX = "JOB_SEARCH_BOX";
-  static const String APP_LAN_BOX = "APP_LAN_BOX";
+  static const String APP_LANGUAGE_BOX = 'app_language_box';
+  static const String CURRENT_LANGUAGE_BOX = 'current_language_box';
   static const String USER_LAN_BOX = "USER_LAN_BOX";
-  static const String CURRENT_LANG_BOX = "languageBox";
   static const String USER_DATA_BOX = "USER_DATA_BOX";
   static const String GENERAL_SETTING_BOX = "GENERAL_SETTING_BOX";
   static const String APP_ACTIVITY_ANALYTICS = "APP_ACTIVITY_ANALYTICS";

@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_project/presentation/provider/app_provider/app_language_provider.dart';
 import 'package:flutter_project/presentation/widgets/catcher_manage.dart';
 import 'package:flutter_project/core/api/api_client.dart';
 import 'package:flutter_project/data/datasources/api_data_source.dart';
@@ -151,6 +152,13 @@ void _initializeCatcher() {
             apiUsecase: ApiUsecase(dataRepositories: context.read<ApiDataRepositories>()),
           ),
           update: (_, provider, repo, previous) => previous!..updateUsecase(ApiUsecase(dataRepositories: repo)),
+        ),
+
+        ChangeNotifierProvider<AppLanguageProvider>(
+          create: (_) => AppLanguageProvider(
+            appLanBox: appLanBox,
+            currentLanBox: currentLanBox,
+          )..loadLanguagesFromAssets(),
         ),
 
         ChangeNotifierProvider(create: (_) => LoadingProvider()),

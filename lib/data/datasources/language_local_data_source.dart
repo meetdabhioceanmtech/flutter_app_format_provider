@@ -11,13 +11,13 @@ abstract class LanguageLocalDataSource {
 class LanguageLocalDataSourceImpl extends LanguageLocalDataSource {
   @override
   Future<String> getPreferredLanguage() async {
-    final languageBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANG_BOX);
+    final languageBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANGUAGE_BOX);
     return languageBox.get(HiveConstants.PREFERRED_LANGUAGE, defaultValue: 'en');
   }
 
   @override
   Future<void> updateLanguage(String languageCode) async {
-    final languageBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANG_BOX);
+    final languageBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANGUAGE_BOX);
     unawaited(languageBox.put(HiveConstants.PREFERRED_LANGUAGE, languageCode));
   }
 }

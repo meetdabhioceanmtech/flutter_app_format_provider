@@ -1,30 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_project/common/constants/env_constants.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
-import 'package:flutter_project/common/constants/languages.dart';
-import 'package:flutter_project/data/datasources/common_api_call.dart';
-import 'package:flutter_project/data/models/common_model/common_respnse_model.dart';
-import 'package:flutter_project/data/models/app_model/language_model.dart';
-import 'package:flutter_project/data/models/common_model/model_response_extend.dart';
-import 'package:flutter_project/domain/entities/app_error.dart';
 import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
-import 'package:flutter_project/domain/usecases/api_usecase.dart';
 import 'package:flutter_project/presentation/provider/common_provider/loading_provider.dart';
-import 'package:flutter_project/presentation/globals.dart';
-import 'package:flutter_project/presentation/utils/app_functions.dart';
+import 'package:hive/hive.dart';
 
 class AppLanguageProvider extends ChangeNotifier {
-  late ApiUsecase _apiUsecase;
-
-  final LoadingProvider loadingProvider;
+  final Box appLanBox;
+  final Box currentLanBox;
 
   bool isLoading = false;
   String? errorMessage;
-  AppErrorType? errorType;
 
   int selectIndex = 0;
   List<AppLanguageEntity> languageEntity = [];
@@ -32,152 +19,196 @@ class AppLanguageProvider extends ChangeNotifier {
   String selectedLanguage = 'en';
 
   AppLanguageProvider({
-    required this.loadingProvider,
-    required ApiUsecase apiUsecase,
-  }) : _apiUsecase = apiUsecase;
+    required this.appLanBox,
+    required this.currentLanBox,
+  });
 
-  void updateUsecase(ApiUsecase usecase) {
-    _apiUsecase = usecase;
-  }
-
-  Future<void> loadInitialData<T extends ModelResponseExtend>() async {
-    final endpoint = dotenv.env[EnvConstants.API_ENDPOINT_2];
-    if (endpoint == null) return;
-
+  Future<void> loadLanguagesFromAssets() async {
     isLoading = true;
     notifyListeners();
 
-    Either<AppError, T> response = await _apiUsecase.call(
-      endpoint: endpoint,
-      fromJson: (json) => LanguageModel.fromJson(json) as T,
-      apiCallType: APICallType.GET,
-      screenName: 'AppLanguage',
-    );
-    response.fold(
-      (error) async {
-        loadingProvider.hide();
-        if (error.errorType == AppErrorType.unauthorised) {
-          await AppFunctions().forceLogout();
-        }
+    try {
+      // Load language list from assets
+      final String response = await rootBundle.loadString('assets/languages/languages.json');
+      final List<dynamic> jsonData = json.decode(response);
 
+      // Convert JSON to language entities
+      List<AppLanguageEntity> tempList = jsonData.map((item) => AppLanguageEntity.fromJson(item)).toList();
+
+      if (tempList.isEmpty) {
         isLoading = false;
-        errorMessage = error.message;
-        errorType = error.errorType;
+        errorMessage = "No languages found.";
         notifyListeners();
-      },
-      (appLangList) async {
-        if (appLangList is LanguageModel) {
-          loadingProvider.hide();
+        return;
+      }
 
-          int defaultIndex = 0;
-          String code = "en";
+      // Determine default language
+      int defaultIndex = 0;
+      String defaultCode = "en";
 
-          if (languages.isNotEmpty) {
-            final index = languages.indexWhere((e) => e.isDefault == 1);
-            if (index != -1) {
-              code = languages[index].shortCode;
-            }
-          }
+      // Check if we have previously saved language
+      if (currentLanBox.containsKey(HiveConstants.PREFERRED_LANGUAGE)) {
+        defaultCode = currentLanBox.get(HiveConstants.PREFERRED_LANGUAGE) ?? "en";
+      }
 
-          List<AppLanguageEntity> temp = [...?appLangList.data];
+      // Find the index of the default language
+      final savedIndex = tempList.indexWhere((e) => e.shortCode == defaultCode);
+      if (savedIndex != -1) {
+        defaultIndex = savedIndex;
+      }
 
-          if (temp.isEmpty) {
-            isLoading = false;
-            errorMessage = "No languages found.";
-            notifyListeners();
-            return;
-          }
+      // Reset all languages to non-default
+      tempList = tempList.map((e) => e.copyWith(isDefault: 0)).toList();
 
-          final enIndex = temp.indexWhere((e) => e.shortCode == code);
-          if (enIndex != -1) {
-            defaultIndex = enIndex;
-          }
+      // Set the selected language as default
+      if (defaultIndex >= 0 && defaultIndex < tempList.length) {
+        tempList[defaultIndex] = tempList[defaultIndex].copyWith(isDefault: 1);
+      }
 
-          temp = temp.map((e) => e.copyWith(isDefault: 0)).toList();
+      // Save language list to local storage
+      await currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, defaultCode);
+      await appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, tempList);
 
-          if (defaultIndex >= 0 && defaultIndex < temp.length) {
-            temp[defaultIndex] = temp[defaultIndex].copyWith(isDefault: 1);
-          }
+      // Update provider state
+      languageEntity = tempList;
+      originalLanguageList = tempList;
+      selectIndex = defaultIndex;
+      selectedLanguage = defaultCode;
 
-          languages = temp;
-          currentLangCode = code;
+      // Load language labels/translations
+      await loadLanguageLabels(
+        selectedIndex: defaultIndex,
+        appLanguageEntity: tempList[defaultIndex],
+      );
 
-          await currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, currentLangCode);
-          await currentLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
-
-          languageEntity = temp;
-          originalLanguageList = temp;
-          selectIndex = defaultIndex;
-          selectedLanguage = code;
-          isLoading = false;
-          notifyListeners();
-
-          // await loadLanguageLabels(
-          //   appLanguageEntity: temp[defaultIndex],
-          //   selectedIndex: defaultIndex,
-          // );
-        }
-      },
-    );
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      isLoading = false;
+      errorMessage = "Failed to load languages: $e";
+      notifyListeners();
+    }
   }
 
-  Future<void> loadLanguageLabels<T extends ModelResponseExtend>({
+  Future<void> loadLanguageLabels({
     required int selectedIndex,
     required AppLanguageEntity appLanguageEntity,
   }) async {
-    final endpoint = dotenv.env[EnvConstants.API_ENDPOINT_3];
-    if (endpoint == null) return;
+    try {
+      // Load language labels/translations from assets
+      final String response = await rootBundle.loadString('assets/languages/${appLanguageEntity.shortCode}.json');
 
-    isLoading = true;
-    notifyListeners();
+      // Parse language data
+      final Map<String, dynamic> languageData = json.decode(response);
 
-    Either<AppError, T> response = await _apiUsecase.call(
-      endpoint: '$endpoint${appLanguageEntity.id}',
-      fromJson: (json) => CommonResponseModel.fromJson(json) as T,
-      apiCallType: APICallType.GET,
-      screenName: 'AppLanguage',
-    );
+      // Save language data to appropriate storage
+      await currentLanBox.put(HiveConstants.LANGUAGE_LABELS, languageData);
 
-    await response.fold(
-      (error) async {
-        if (error.errorType == AppErrorType.unauthorised) {
-          await AppFunctions().forceLogout();
-        }
+      // Update provider state
+      selectIndex = selectedIndex;
+      selectedLanguage = appLanguageEntity.shortCode;
 
-        loadingProvider.hide();
-        errorMessage = error.message;
-        errorType = error.errorType;
-        isLoading = false;
-        notifyListeners();
-      },
-      (status) async {
-        loadingProvider.hide();
-        isLoading = false;
+      // Reset all languages to non-default
+      languageEntity = languageEntity.map((e) => e.copyWith(isDefault: 0)).toList();
 
-        if (status is CommonResponseModel && status.status) {
-          if (status.data.isNotEmpty) {
-            String code = appLanguageEntity.shortCode;
-            final file = await File('$languageLocalPath/$code.json').create(recursive: true);
-            file.writeAsStringSync(jsonEncode(status.data));
-          }
+      // Set selected language as default
+      languageEntity[selectedIndex] = languageEntity[selectedIndex].copyWith(isDefault: 1);
 
-          languageEntity = languageEntity.map((e) => e.copyWith(isDefault: 0)).toList();
-          languageEntity[selectedIndex] = languageEntity[selectedIndex].copyWith(isDefault: 1);
-          originalLanguageList = List.from(languageEntity);
-          selectIndex = selectedIndex;
-          selectedLanguage = languageEntity[selectedIndex].shortCode;
-          notifyListeners();
-        }
-      },
-    );
+      // Update original list
+      originalLanguageList = List.from(languageEntity);
+
+      notifyListeners();
+    } catch (e) {
+      errorMessage = "Failed to load language labels for ${appLanguageEntity.shortCode}: $e";
+      notifyListeners();
+    }
   }
 
+  Future<void> changeLanguage({required int index}) async {
+    if (index == selectIndex) return;
+
+    // loadingProvider.show();
+
+    try {
+      // Get current language list
+      List<AppLanguageEntity> currentLanguages = List.from(languageEntity);
+
+      // Reset all languages to non-default
+      currentLanguages = currentLanguages.map((e) => e.copyWith(isDefault: 0)).toList();
+
+      // Set selected language as default
+      currentLanguages[index] = currentLanguages[index].copyWith(isDefault: 1);
+
+      // Update local storage
+      await currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, currentLanguages[index].shortCode);
+      await appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, currentLanguages);
+
+      // Update provider state
+      languageEntity = currentLanguages;
+      originalLanguageList = currentLanguages;
+
+      // Load translations for the selected language
+      await loadLanguageLabels(
+        selectedIndex: index,
+        appLanguageEntity: currentLanguages[index],
+      );
+
+      // loadingProvider.hide();
+    } catch (e) {
+      // loadingProvider.hide();
+      errorMessage = "Failed to change language: $e";
+      notifyListeners();
+    }
+  }
+
+  // Method to set language locally without immediately loading language labels
   Future<void> setLocallyLanguage({required int index}) async {
-    languages = languages.map((e) => e.copyWith(isDefault: 0)).toList();
-    languages[index] = languages[index].copyWith(isDefault: 1);
-    await currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, languages[index].shortCode);
-    await appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
-    selectedLanguage = languages[index].shortCode;
+    if (index < 0 || index >= languageEntity.length) return;
+
+    try {
+      // Update select index
+      selectIndex = index;
+
+      // Reset all languages to non-default
+      List<AppLanguageEntity> updatedList = languageEntity.map((e) => e.copyWith(isDefault: 0)).toList();
+
+      // Set selected language as default
+      updatedList[index] = updatedList[index].copyWith(isDefault: 1);
+      selectedLanguage = updatedList[index].shortCode;
+
+      // Update language lists
+      languageEntity = updatedList;
+      originalLanguageList = List.from(updatedList);
+
+      // Save to storage
+      await currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, selectedLanguage);
+      await appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, updatedList);
+
+      // Notify listeners to rebuild UI
+      notifyListeners();
+    } catch (e) {
+      errorMessage = "Failed to set language locally: $e";
+      notifyListeners();
+    }
+  }
+
+  void filterLanguageList(String searchString) {
+    if (searchString.isEmpty) {
+      languageEntity = List.from(originalLanguageList);
+    } else {
+      languageEntity = originalLanguageList
+          .where((element) => element.name.toLowerCase().contains(searchString.toLowerCase()))
+          .toList();
+    }
     notifyListeners();
+  }
+
+  // Helper method to get language label
+  String getLabel(String key, {String defaultValue = ''}) {
+    final Map<String, dynamic>? labels = currentLanBox.get(HiveConstants.LANGUAGE_LABELS);
+    if (labels != null && labels.containsKey(key)) {
+      return labels[key].toString();
+    }
+    return defaultValue.isEmpty ? key : defaultValue;
   }
 }

@@ -27,8 +27,8 @@ class SetupHive {
       ..registerAdapter<CityData>(CityDataAdapter());
 
     appBox = await Hive.openBox(HiveBoxConstants.JOB_SEARCH_BOX);
-    appLanBox = await Hive.openBox(HiveBoxConstants.APP_LAN_BOX);
-    currentLanBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANG_BOX);
+    appLanBox = await Hive.openBox(HiveBoxConstants.APP_LANGUAGE_BOX);
+    currentLanBox = await Hive.openBox(HiveBoxConstants.CURRENT_LANGUAGE_BOX);
     userDataBox = await Hive.openBox(HiveBoxConstants.USER_DATA_BOX);
     generalSettingBox = await Hive.openBox(HiveBoxConstants.GENERAL_SETTING_BOX);
     appActivityAnaltics = await Hive.openBox(HiveBoxConstants.APP_ACTIVITY_ANALYTICS);
@@ -67,7 +67,7 @@ class SetupHive {
       appBox.put(HiveConstants.SHARE_NUMBER, 0);
       appBox.put(HiveConstants.NAV_NUMBER, 0);
 
-      languages = [AppLanguageEntity(id: 1, shortCode: 'en', title: 'English', isDefault: 1)];
+      languages = [AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1)];
       appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
       currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, 'en');
     } else {
@@ -75,13 +75,13 @@ class SetupHive {
         appLanBox.get(
           HiveConstants.APP_LANGUAGE_LIST,
           defaultValue: <AppLanguageEntity>[
-            AppLanguageEntity(id: 1, shortCode: 'en', title: 'English', isDefault: 1),
+            AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1),
           ],
         ),
       );
 
       if (languages.isEmpty) {
-        languages = [AppLanguageEntity(id: 1, shortCode: 'en', title: 'English', isDefault: 1)];
+        languages = [AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1)];
         appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
       }
 

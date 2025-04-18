@@ -6,7 +6,7 @@ class LanguageProvider with ChangeNotifier {
   // final GetPreferredLanguage getPreferredLanguage;
   // final UpdateLanguage updateLanguage;
 
-  Locale _locale = Locale(currentLangCode);
+  final Locale _locale = Locale(currentLangCode);
   Locale get locale => _locale;
 
   int? _selectedIndex;
