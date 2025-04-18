@@ -252,12 +252,19 @@ class AppFunctions {
   void cleanUpMemory() {
     ImageCache imageCache = PaintingBinding.instance.imageCache;
 
-    if (imageCache.currentSizeBytes >= 55 << 20 || imageCache.currentSize >= 50) {
+    // Clear cache if it exceeds 40MB or 40 images
+    if (imageCache.currentSizeBytes >= 40 << 20 || imageCache.currentSize >= 40) {
       imageCache.clear();
     }
-    if (imageCache.liveImageCount >= 20) {
+
+    // Clear live images if count exceeds 15
+    if (imageCache.liveImageCount >= 15) {
       imageCache.clearLiveImages();
     }
+
+    // Force garbage collection
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
   }
 
   Future<void> incrementNotificationCount() async {

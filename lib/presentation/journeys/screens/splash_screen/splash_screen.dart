@@ -29,36 +29,38 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     setImageInLocal();
-    Future.delayed(Duration.zero, () async {
+    Future.microtask(() async {
       await initialMessage(context: context);
       startTimer();
     });
   }
 
   Future<void> setImageInLocal() async {
-    splashUrl = await appBox.get(HiveConstants.SPLASH_IMAGE_PATH) ?? "";
-    if (splashUrl.isEmpty || splashUrl == 'null') return;
-    final directory = '${(await getApplicationDocumentsDirectory()).path}${Platform.pathSeparator}splash';
-    File file = File('$directory${Platform.pathSeparator}${splashUrl.split('/').last}');
+    try {
+      splashUrl = await appBox.get(HiveConstants.SPLASH_IMAGE_PATH) ?? "";
+      if (splashUrl.isEmpty || splashUrl == 'null') return;
 
-    if (!await file.exists() && splashUrl.startsWith('https')) {
-      try {
+      final directory = '${(await getApplicationDocumentsDirectory()).path}${Platform.pathSeparator}splash';
+      File file = File('$directory${Platform.pathSeparator}${splashUrl.split('/').last}');
+
+      if (!await file.exists() && splashUrl.startsWith('https')) {
         final parentDir = Directory(directory);
         if (await parentDir.exists()) {
           await parentDir.delete(recursive: true);
         }
         await file.create(recursive: true);
+
         Client client = Client();
         var response = await client.get(Uri.parse(splashUrl));
         await file.writeAsBytes(response.bodyBytes);
-      } catch (e) {
-        if (await file.exists()) {
-          await file.delete();
-        }
       }
-    } else {
-      splashImage = file;
-      setState(() {});
+
+      if (await file.exists()) {
+        splashImage = file;
+        setState(() {});
+      }
+    } catch (e) {
+      debugPrint('Error loading splash image: $e');
     }
   }
 

@@ -143,25 +143,29 @@ abstract class AppHomeWidget extends State<AppHome> {
           alignment: Alignment.topCenter,
           padding: Platform.isAndroid ? EdgeInsets.symmetric(vertical: isNeedSafeArea ? 8.h : 0) : null,
           decoration: BoxDecoration(
-            boxShadow: [BoxShadow(color: appConstants.primary4Color, blurRadius: 3, offset: const Offset(0, 2))],
+            color: appConstants.whiteBackgroundColor,
+            boxShadow: [
+              BoxShadow(color: appConstants.primary4Color.withOpacity(0.1), blurRadius: 3, offset: const Offset(0, 2))
+            ],
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Expanded(
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    for (var i = 0; i < bottomBarItems.length; i++)
-                      Expanded(
-                        child: NavTitleWidget(
-                          title: bottomBarItems[i].title.translate(context),
-                          onTap: () => provider.changeIndex(i),
-                          iconPath: bottomBarItems[i].icon,
-                          isSelected: bottomBarItems[i].index == provider.currentIndex,
-                        ),
+                  children: List.generate(
+                    bottomBarItems.length,
+                    (i) => Expanded(
+                      child: NavTitleWidget(
+                        title: bottomBarItems[i].title.translate(context),
+                        onTap: () => provider.changeIndex(i),
+                        iconPath: bottomBarItems[i].icon,
+                        isSelected: bottomBarItems[i].index == provider.currentIndex,
                       ),
-                  ],
+                    ),
+                  ),
                 ),
               ),
             ],
