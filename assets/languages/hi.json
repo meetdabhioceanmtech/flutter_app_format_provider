@@ -27,6 +27,7 @@
   "no_data_found": "माफ़ कीजिए, कोई डेटा नहीं मिला",
   "there_is_no_data_to_show_you": "अभी आपके लिए कोई डेटा उपलब्ध नहीं है।",
   "language": "भाषा",
+  "select_language": "भाषा चुनें",
   "home": "होम",
   "setting": "सेटिंग",
   "terms_condition": "नियम और शर्तें",
@@ -42,5 +43,6 @@
   "something_went_wrong": "कुछ गलत हो गया",
   "my_notifications": "मेरी सूचनाएँ",
   "hint_no_notification": "आपके पास कोई सूचना नहीं है",
-  "recharge": "रिचार्ज"
+  "recharge": "रिचार्ज",
+  "search": "खोजें"
 }

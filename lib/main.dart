@@ -154,13 +154,7 @@ void _initializeCatcher() {
           update: (_, provider, repo, previous) => previous!..updateUsecase(ApiUsecase(dataRepositories: repo)),
         ),
 
-        ChangeNotifierProvider<AppLanguageProvider>(
-          create: (_) => AppLanguageProvider(
-            appLanBox: appLanBox,
-            currentLanBox: currentLanBox,
-          )..loadLanguagesFromAssets(),
-        ),
-
+        ChangeNotifierProvider<AppLanguageProvider>(create: (context) => AppLanguageProvider()),
         ChangeNotifierProvider(create: (_) => LoadingProvider()),
         ChangeNotifierProvider(create: (_) => CounterProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),

@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/common/constants/hive_constants.dart';
-import 'package:flutter_project/common/constants/languages.dart';
 import 'package:flutter_project/common/constants/theme.dart';
 import 'package:flutter_project/data/models/app_model/general_setting_model.dart';
 import 'package:flutter_project/domain/entities/general_setting/general_setting_entity.dart';
-import 'package:flutter_project/domain/entities/language/app_language_entity.dart';
 import 'package:flutter_project/domain/entities/user/user_entity.dart';
 import 'package:flutter_project/presentation/globals.dart';
 import 'package:flutter_project/presentation/utils/app_functions.dart';
@@ -18,7 +16,6 @@ class SetupHive {
     Hive.init(dir.path);
 
     Hive
-      ..registerAdapter<AppLanguageEntity>(AppLanguageEntityAdapter())
       ..registerAdapter<GeneralSettingEntity>(GeneralSettingEntityAdapter())
       ..registerAdapter<Sector>(SectorAdapter())
       ..registerAdapter<UserLanguage>(UserLanguageAdapter())
@@ -40,8 +37,11 @@ class SetupHive {
     isGeneralSettingBox = true;
     isAppActivityAnaltics = true;
 
-    isFirst = appBox.get(HiveConstants.IS_FIRST_LOAD, defaultValue: true);
+    //Language Management
     currentLangCode = currentLanBox.get(HiveConstants.PREFERRED_LANGUAGE, defaultValue: 'en');
+    currentLanguagelabels = currentLanBox.get(HiveConstants.LANGUAGE_LABELS, defaultValue: null);
+
+    isFirst = appBox.get(HiveConstants.IS_FIRST_LOAD, defaultValue: true);
     userToken = userDataBox.get(HiveConstants.USER_TOKEN, defaultValue: null);
     userFcmToken = userDataBox.get(HiveConstants.USER_FCM_TOKEN, defaultValue: "notfound");
     deviceData = Map<String, String>.from(appBox.get(HiveConstants.DEVICE_DATA, defaultValue: {}));
@@ -56,7 +56,6 @@ class SetupHive {
     } else {
       currentTheme = Themes.system;
     }
-
     deviceData = await AppFunctions().initPlatformState();
     await _saveAssetsLangToDevice();
   }
@@ -66,28 +65,6 @@ class SetupHive {
       appBox.put(HiveConstants.IS_FIRST_LOAD, false);
       appBox.put(HiveConstants.SHARE_NUMBER, 0);
       appBox.put(HiveConstants.NAV_NUMBER, 0);
-
-      languages = [AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1)];
-      appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
-      currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, 'en');
-    } else {
-      languages = List<AppLanguageEntity>.from(
-        appLanBox.get(
-          HiveConstants.APP_LANGUAGE_LIST,
-          defaultValue: <AppLanguageEntity>[
-            AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1),
-          ],
-        ),
-      );
-
-      if (languages.isEmpty) {
-        languages = [AppLanguageEntity(id: 1, shortCode: 'en', name: 'English', isDefault: 1)];
-        appLanBox.put(HiveConstants.APP_LANGUAGE_LIST, languages);
-      }
-
-      final defaultLang = languages.firstWhere((lang) => lang.isDefault == 1, orElse: () => languages.first);
-      currentLangCode = defaultLang.shortCode;
-      currentLanBox.put(HiveConstants.PREFERRED_LANGUAGE, currentLangCode);
     }
 
     navigationCount = appBox.get(HiveConstants.NAV_NUMBER, defaultValue: 0);

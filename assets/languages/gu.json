@@ -27,6 +27,7 @@
   "no_data_found": "માફ કરો, કોઈ માહિતી મળી નથી",
   "there_is_no_data_to_show_you": "તમે જુઓ એવી કોઈ માહિતી ઉપલબ્ધ નથી",
   "language": "ભાષા",
+  "select_language": "ભાષા પસંદ કરો",
   "home": "હોમ",
   "setting": "સેટિંગ",
   "terms_condition": "નિયમો અને શરતો",
@@ -42,5 +43,6 @@
   "something_went_wrong": "કંઈક ખોટું થયું",
   "my_notifications": "મારી નોટિફિકેશન્સ",
   "hint_no_notification": "તમારું કોઈ સૂચન નથી",
-  "recharge": "રીચાર્જ"
+  "recharge": "રીચાર્જ",
+  "search": "શોધો"
 }

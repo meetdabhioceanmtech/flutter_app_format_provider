@@ -10,7 +10,6 @@ class HiveConstants {
   static const String NAV_NUMBER = "NAV_NUMBER";
   static const String SHARE_NUMBER = "SHARE_NUMBER";
 
-  static const String APP_LANGUAGE_LIST = "APP_LANGUAGE_LIST";
   static const String USER_LANGUAGE_LIST = "USER_LANGUAGE_LIST";
   static const String LANGUAGE_LABELS = 'language_labels';
 

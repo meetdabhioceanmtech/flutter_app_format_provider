@@ -5,6 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_project/common/constants/theme.dart';
+import 'package:flutter_project/presentation/provider/app_provider/language_provider.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_project/domain/entities/general_setting/general_setting_entity.dart';
 import 'package:flutter_project/presentation/provider/common_provider/counter_provider.dart';
@@ -37,7 +38,6 @@ late int launchNo;
 late bool? isDarkMode;
 late FirebaseAnalytics? firebaseAnalytics;
 String languageLocalPath = '';
-late String currentLangCode;
 bool locationPermission = false;
 
 Map<String, String>? deviceData;
@@ -82,7 +82,6 @@ final routingIsolateReceivePort = ReceivePort();
 final postIsolateReceivePort = ReceivePort();
 final ReceivePort receivePort = ReceivePort();
 
-
 Themes currentTheme = Themes.system;
 
 class Message {
@@ -114,3 +113,8 @@ String notificationKey = "getNotification";
 
 GeneralSettingEntity? generalSettingEntity;
 bool appNotification = true;
+
+// Language Management
+dynamic currentLanguagelabels;
+late String currentLangCode;
+late LanguageProvider languageProvider;

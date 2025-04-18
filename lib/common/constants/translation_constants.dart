@@ -25,6 +25,7 @@ class TranslationConstants {
   static const String no_data_found = "no_data_found";
   static const String there_is_no_data_to_show_you = "there_is_no_data_to_show_you";
   static const String language = "language";
+  static const String select_language = "select_language";
   static const String home = "home";
   static const String setting = "setting";
   static const String terms_condition = "terms_condition";
@@ -41,4 +42,5 @@ class TranslationConstants {
   static const String my_notifications = "my_notifications";
   static const String hint_no_notification = "hint_no_notification";
   static const String recharge = "recharge";
+  static const String search = "search";
 }

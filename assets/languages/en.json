@@ -21,6 +21,7 @@
   "no_data_found": "Sorry, No data found",
   "there_is_no_data_to_show_you": "There is no data to show you right now.",
   "language": "Language",
+  "select_language": "Select Language",
   "home": "Home",
   "setting": "Setting",
   "terms_condition": "Terms Condition",
@@ -36,5 +37,6 @@
   "something_went_wrong": "Something went wrong",
   "my_notifications": "My Notification",
   "hint_no_notification": "You don’t have notification",
-  "recharge": "Recharge"
+  "recharge": "Recharge",
+  "search": "Search"
 }

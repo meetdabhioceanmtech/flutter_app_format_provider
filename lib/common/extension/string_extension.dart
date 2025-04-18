@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/presentation/globals.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_project/core/api/build_context.dart';
-import 'package:flutter_project/core/localization/app_localizations.dart';
 
 extension StringExtension on String {
   String intelliTrim() {
@@ -18,17 +17,21 @@ extension StringExtension on String {
   // }
 
   String translate(BuildContext? context) {
-    String label = (AppLocalizations.of(context ?? buildContext)?.translate(this) ??
-            AppLocalizations.of(context ?? buildContext)?.defaultTranslate(this) ??
-            '')
-        .replaceAll("\\n", "\n")
-        .replaceAll("==", "\n");
+    String label = this;
+    label = label.replaceAll("\\n", "\n").replaceAll("==", "\n");
 
-    return label.isNotEmpty
-        ? label
-        : (AppLocalizations.of(context ?? buildContext)?.defaultTranslate(this) ?? '')
-            .replaceAll("\\n", "\n")
-            .replaceAll("==", "\n");
+    try {
+      if (currentLanguagelabels != null && currentLanguagelabels is Map) {
+        final value = currentLanguagelabels[label];
+        if (value != null) {
+          return value.toString();
+        }
+      }
+      return label;
+    } catch (e) {
+      debugPrint('Error translating: $e');
+      return label;
+    }
   }
 
   String countryTrim() {

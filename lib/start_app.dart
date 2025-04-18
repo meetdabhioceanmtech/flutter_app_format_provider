@@ -6,11 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_project/common/constants/languages.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_project/core/network/network_connection.dart';
 import 'package:flutter_project/presentation/provider/app_provider/language_provider.dart';
 import 'package:flutter_project/presentation/provider/common_provider/theme_provider.dart';
-import 'package:flutter_project/common/constants/languages.dart';
 import 'package:flutter_project/common/constants/route_constants.dart';
 import 'package:flutter_project/common/constants/theme.dart';
 import 'package:flutter_project/core/localization/app_localizations.dart';
@@ -32,6 +32,7 @@ class StartApp extends StatefulWidget {
 }
 
 class _StartAppState extends State<StartApp> {
+  final _materialAppKey = GlobalKey();
   late ThemeProvider _themeProvider;
 
   @override
@@ -39,6 +40,7 @@ class _StartAppState extends State<StartApp> {
     appConstants.loadLight();
     super.initState();
     _themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     // badgeCounterProvider = Provider.of<CounterProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -181,7 +183,6 @@ class _StartAppState extends State<StartApp> {
         return Material(
           child: Consumer<LanguageProvider>(
             builder: (context, languageProvider, _) {
-              final locale = languageProvider.locale;
               return ScreenUtilInit(
                 useInheritedMediaQuery: true,
                 designSize: getDeviceType() == DeviceType.tablet ? const Size(834, 1194) : const Size(360, 800),
@@ -190,9 +191,10 @@ class _StartAppState extends State<StartApp> {
                 minTextAdapt: true,
                 builder: (context, snapshot) {
                   return MaterialApp(
+                    key: _materialAppKey,
                     debugShowCheckedModeBanner: false,
-                    locale: locale,
-                    supportedLocales: languages.map((e) => Locale(e.shortCode.toString())).toList(),
+                    locale: Locale(currentLangCode),
+                    supportedLocales: languagesList.map((e) => Locale(e.shortCode.toString())).toList(),
                     localizationsDelegates: const [
                       AppLocalizations.delegate,
                       GlobalMaterialLocalizations.delegate,

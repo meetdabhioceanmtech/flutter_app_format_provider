@@ -1,21 +1,11 @@
 import 'package:hive/hive.dart';
-part 'app_language_entity.g.dart';
 
-@HiveType(typeId: 0)
 class AppLanguageEntity extends HiveObject {
-  @HiveField(0)
   final int id;
-
-  @HiveField(1)
   final String name;
-
-  @HiveField(2)
   final String shortCode;
 
-  @HiveField(3)
-  final int isDefault;
-
-  AppLanguageEntity({required this.id, required this.name, required this.shortCode, required this.isDefault});
+  AppLanguageEntity({required this.id, required this.name, required this.shortCode});
 
   AppLanguageEntity copyWith({
     int? id,
@@ -24,10 +14,10 @@ class AppLanguageEntity extends HiveObject {
     int? isDefault,
   }) {
     return AppLanguageEntity(
-        id: id ?? this.id,
-        shortCode: shortCode ?? this.shortCode,
-        name: name ?? this.name,
-        isDefault: isDefault ?? this.isDefault);
+      id: id ?? this.id,
+      shortCode: shortCode ?? this.shortCode,
+      name: name ?? this.name,
+    );
   }
 
   factory AppLanguageEntity.fromJson(Map<String, dynamic> json) {
@@ -35,7 +25,6 @@ class AppLanguageEntity extends HiveObject {
       id: json['id'] as int,
       name: json['name'] as String,
       shortCode: json['short_code'] as String,
-      isDefault: json['is_default'] as int? ?? 0,
     );
   }
 
@@ -44,7 +33,6 @@ class AppLanguageEntity extends HiveObject {
       'id': id,
       'name': name,
       'short_code': shortCode,
-      'is_default': isDefault,
     };
   }
 }
